@@ -1,17 +1,22 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+require('dotenv').config()
 
-// Connect to database
-const db = mysql.createConnection(
-    {
-      host: 'localhost',
-      // Your MySQL username,
-      user: 'root',
-      // Your MySQL password
-      password: '',
-      database: 'employees'
+// create the connection to database
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'employee'
+});
+
+connection.query(
+    'SELECT * FROM `department` WHERE `id` = "1"',
+    function(err, results, fields) {
+        console.log(results);
+        console.log(fields);
     }
-  );
+);
 
 const menu = () => {
     return inquirer.prompt([
