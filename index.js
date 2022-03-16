@@ -6,15 +6,16 @@ require('dotenv').config()
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: process.env.DB_PASS,
     database: 'employee'
 });
 
-connection.query(
+connection.execute(
     'SELECT * FROM `department` WHERE `id` = "1"',
     function(err, results, fields) {
         console.log(results);
         console.log(fields);
+        console.log(err);
     }
 );
 
@@ -32,7 +33,6 @@ const menu = () => {
         //}
     ])
 }
-
 
 
 
