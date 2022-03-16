@@ -1,18 +1,14 @@
 const inquirer = require('inquirer');
-const menu = require('node-menu');
+
+const menu = () => {
+    return inquirer.prompt([
+        {
+            type: 'list',
+            name: 'What would you like to do?',
+            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role']
+        }
+    ])
+}
 
 
-
-
-
-menu.addDelimiter('-', 33, 'Employee Tracker')
-    .addItem(
-        'View All Employees'
-    )
-    .addItem(
-        'Add Employee'
-    );
-
-
-
-menu.start();
+menu();
