@@ -7,11 +7,11 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: process.env.DB_PASS,
-    database: 'employee'
+    database: 'employees'
 });
 
 connection.execute(
-    'SELECT * FROM `department` WHERE `id` = "1"',
+    'SELECT * FROM `department` WHERE `id` = "2"',
     function(err, results, fields) {
         console.log(results);
         console.log(fields);
