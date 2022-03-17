@@ -26,7 +26,8 @@ const message = {
     addDepartment: 'Add Department',
     addRole: 'Add Role',
     addEmployee: 'Add Employee',
-    updateEmployeeRole: 'Update Employee Role'
+    updateEmployeeRole: 'Update Employee Role',
+    quit: 'Quit'
 }
 
 //prompt menu
@@ -44,7 +45,7 @@ const menu = () => {
                 message.addRole,
                 message.addEmployee,
                 message.updateEmployeeRole, 
-                'Quit'
+                message.quit,
             ]
         }
     ])
@@ -85,6 +86,11 @@ const menu = () => {
                 updateEmployeeRole();
                 break;
         }
+        switch (answer.selection) {
+            case message.quit:
+                quit();
+                break;
+        }
     })
 };
 
@@ -108,7 +114,12 @@ function viewAllRoles() {
 }
 
 function viewAllEmployees() {
-
+    const query = `SELECT * FROM employee`;
+    connection.query(query, (err, data) => {
+        if (err) throw err;
+        console.table(data)
+        menu();
+    });
 }
 
 function addDepartment() {
@@ -127,6 +138,9 @@ function updateEmployeeRole() {
 
 }
 
+function quit() {
+    connection.end();
+}
 
 
 menu();
