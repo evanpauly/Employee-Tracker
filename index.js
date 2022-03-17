@@ -55,6 +55,36 @@ const menu = () => {
                 viewAllDepartments();
                 break;
         }
+        switch (answer.selection) {
+            case message.viewAllRoles:
+                viewAllRoles();
+                break;
+        }
+        switch (answer.selection) {
+            case message.viewAllEmployees:
+                viewAllEmployees();
+                break
+        }
+        switch (answer.selection) {
+            case message.addDepartment:
+                addDepartment();
+                break;
+        }
+        switch (answer.selection) {
+            case message.addRole:
+                addRole();
+                break;
+        }
+        switch (answer.selection) {
+            case message.addEmployee:
+                addEmployee();
+                break;
+        }
+        switch (answer.selection) {
+            case message.updateEmployeeRole:
+                updateEmployeeRole();
+                break;
+        }
     })
 };
 
@@ -64,12 +94,17 @@ function viewAllDepartments() {
     connection.query(query, (err,data) => {
         if (err) throw err;
         console.table(data);
-        inquirer.prompt();
+        menu();
     });
 }
 
 function viewAllRoles() {
-
+    const query = `SELECT * FROM role`;
+    connection.query(query, (err, data) => {
+        if (err) throw err;
+        console.table(data);
+        menu();
+    });
 }
 
 function viewAllEmployees() {
