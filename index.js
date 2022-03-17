@@ -11,11 +11,9 @@ const connection = mysql.createConnection({
 });
 
 connection.execute(
-    'SELECT * FROM `department` WHERE `id` = "2"',
+    'SELECT * FROM `department` WHERE `id` = "?"',
     function(err, results, fields) {
-        console.log(results);
-        console.log(fields);
-        console.log(err);
+        if (err) throw (err);
     }
 );
 
@@ -24,14 +22,52 @@ const menu = () => {
         {
             type: 'list',
             name: 'What would you like to do?',
-            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role', 'Quit']
+            choices: [
+                'View All Departments', 
+                'View All Roles', 
+                'View All Employees', 
+                'Add Department', 
+                'Add Role', 
+                'Add Employee', 
+                'Update Employee Role', 
+                'Quit'
+            ]
         },
-        //{
-        //    type: 'input',
-        //    name: 'Add Department',
-        //    message: 'What is the name of the department?'
-        //}
     ])
+}
+
+
+function viewAllDepartments() {
+    const query = `SELECT department.name, department.id FROM department`;
+    connection.query(query, (err,data) => {
+        if (err) throw err;
+        console.table(data);
+        inquirer.prompt();
+    });
+}
+
+function viewAllRoles() {
+
+}
+
+function viewAllEmployees() {
+
+}
+
+function addDepartment() {
+
+}
+
+function addRole() {
+
+}
+
+function addEmployee() {
+
+}
+
+function updateEmployeeRole() {
+
 }
 
 
