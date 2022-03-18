@@ -123,7 +123,20 @@ function viewAllEmployees() {
 }
 
 function addDepartment() {
-
+    inquirer.prompt([
+        {
+            name: 'department',
+            type: 'input',
+            message: 'What is the name of the department you want to add?'
+        }
+    ])
+        .then((answer) => {
+            const newDepartment = `INSERT INTO department (name) VALUES ('${answer.department}')`
+            connection.query(newDepartment, (err) => {
+                if (err) throw err;
+                menu();
+            })
+        })
 }
 
 function addRole() {
