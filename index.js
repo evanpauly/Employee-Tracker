@@ -184,9 +184,42 @@ function addRole() {
 }
 
 function addEmployee() {
-
+    var roleOptions = []
+    var query = `SELECT * FROM role`
+    connection.query(query, (err, data) => {
+        if (err) throw err;
+        roleOptions = data.map(({ id, title }) => (
+            {
+                name: title,
+                value: id
+            }
+        ))
+    });
+    inquirer.prompt([
+        {
+            name: 'first_name',
+            type: 'input',
+            message: 'What is the first name of the new employee?'
+        },
+        {
+            name: 'last_name',
+            type: 'input',
+            message: 'What is the last name of the new employee?'
+        },
+        {
+            name: 'role_id',
+            type: 'list',
+            message: 'What is the role of the new employee?'
+        }
+    ])
+    .then((answer) => {
+        const newEmployee = `INSERT INTO employee (first_name, last_name, role_id) VALUES ('${answer.first_name}','${answer.last_name}',${answer.role_id})`
+        connection.query(newEmployee, (err) => {
+            if (err) throw err;
+            menu();
+        })
+    })
 }
-
 function updateEmployeeRole() {
 
 }
