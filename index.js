@@ -131,6 +131,7 @@ function addDepartment() {
         }
     ])
         .then((answer) => {
+            //interpolate answer into SQL script
             const newDepartment = `INSERT INTO department (name) VALUES ('${answer.department}')`
             connection.query(newDepartment, (err) => {
                 if (err) throw err;
@@ -140,7 +141,46 @@ function addDepartment() {
 }
 
 function addRole() {
-
+    //declare variables for user selection and interpolation
+    var departmentChoices = []
+    var newDepartment = `SELECT * FROM department`
+    //get information
+    connection.query(newDepartment, (err, data) => {
+        if (err) throw err;
+        departmentChoices = data.map(({ id, department }) => (
+            {
+                name: department,
+                value: id
+            }
+        ))
+//prompt user
+    inquirer.prompt([
+        {
+            name: 'role',
+            type: 'input',
+            message: 'What is the name of the role you want to add?'
+        },
+        {
+            name: 'salary',
+            type: 'input',
+            message: 'What is the salary of the new role?'
+        },
+        {
+            name: 'department',
+            type: 'list',
+            message: 'What department will the role be added to?',
+            choices: departmentChoices
+        }
+    ])
+    //interpolate and add to table
+    .then((answer) => {
+        const newRole = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.role}',${answer.salary}',${answer.department}')`
+        connection.query(newRole, (err) => {
+            if (err) throw err;
+            menu();
+        })
+    })
+});
 }
 
 function addEmployee() {
