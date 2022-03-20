@@ -1,5 +1,4 @@
 const inquirer = require('inquirer');
-const { up } = require('inquirer/lib/utils/readline');
 const mysql = require('mysql2');
 require('dotenv').config()
 
@@ -94,7 +93,7 @@ const menu = () => {
     })
 };
 
-//functions for selections
+//functions for selections begin
 function viewAllDepartments() {
     const query = `SELECT * FROM department`;
     connection.query(query, (err,data) => {
@@ -174,7 +173,7 @@ function addRole() {
     ])
     //interpolate and add to table
     .then((answer) => {
-        const newRole = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.role}',${answer.salary}',${answer.department}')`
+        const newRole = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.role}','${answer.salary}','${answer.department}')`
         connection.query(newRole, (err) => {
             if (err) throw err;
             menu();
@@ -185,8 +184,8 @@ function addRole() {
 
 function addEmployee() {
     var roleOptions = []
-    var query = `SELECT * FROM role`
-    connection.query(query, (err, data) => {
+    var employeeQuery = `SELECT * FROM role`
+    connection.query(employeeQuery, (err, data) => {
         if (err) throw err;
         roleOptions = data.map(({ id, title }) => (
             {
@@ -194,7 +193,6 @@ function addEmployee() {
                 value: id
             }
         ))
-    });
     inquirer.prompt([
         {
             name: 'first_name',
@@ -209,7 +207,8 @@ function addEmployee() {
         {
             name: 'role_id',
             type: 'list',
-            message: 'What is the role of the new employee?'
+            message: 'What is the role of the new employee?',
+            choices: roleOptions
         }
     ])
     .then((answer) => {
@@ -219,14 +218,49 @@ function addEmployee() {
             menu();
         })
     })
+});
 }
-function updateEmployeeRole() {
 
+function updateEmployeeRole() {
+    //prompt for specific employee
+    inquirer.prompt([
+        {
+        name: 'id',
+        type: 'input',
+        message: 'Which employee is changing roles?'
+        }
+    ])
+    //take response and use it to select the specific employee
+        .then((answer) => {
+            connection.query('SELECT role.id, role.title FROM role ORDER BY role.id;', async (err, res) => {
+                if (err) throw err;
+                //prompt for updated role
+                const { role } = await inquirer.prompt([
+                    {
+                        name: 'role',
+                        type: 'list',
+                        message: 'What is the updated role for the employee?',
+                        choices: () => res.map(res => res.title)
+                    }
+                ]);
+                var role_id;
+                for (const row of res) {
+                    if (row.title === role) {
+                        role_id = row.id;
+                        continue;
+                    }
+                }
+                //use input to update employee role
+                connection.query(`UPDATE employee SET role_id = '${role_id}' WHERE employee.id = '${answer.id}'` , async (err, res) => {
+                    if (err) throw err;
+                    menu();
+                })
+            })
+        })
 }
 
 function quit() {
     connection.end();
 }
-
 
 menu();
