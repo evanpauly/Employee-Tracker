@@ -12,7 +12,7 @@ A node.js application using mysql to track employees.
 
 In the command line, run:
 
-`node server.js`
+`node index.js`
 
 ## Link to Tutorial Video
 
