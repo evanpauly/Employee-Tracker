@@ -14,7 +14,7 @@ In the command line, run:
 
 `node server.js`
 
-## Link to Tutorial Video:
+## Link to Tutorial Video
 
 
 ## Screenshot
